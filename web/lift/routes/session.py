@@ -7,3 +7,8 @@ bp = Blueprint('session', __name__)
 def history():
 
     return render_template('session/history.html')
+
+@bp.route('/session/new')
+def new():
+
+    return render_template('session/new.html')
