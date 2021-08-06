@@ -1,0 +1,40 @@
+org: thomaselder
+app: lift
+service: athletes
+
+frameworkVersion: '2'
+
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: '20201221'
+
+functions:
+  create:
+    handler: handler.create_athlete
+    events:
+      - http:
+          path: /create
+          method: get
+  
+  read:
+    handler: handler.read_athlete
+    events:
+      - http:
+          path: /read
+          method: get
+  
+  update:
+    handler: handler.update_athlete
+    events:
+      - http:
+          path: /update
+          method: get
+  
+  delete:
+    handler: handler.delete_athlete
+    events:
+      - http:
+          path: /delete
+          method: get
