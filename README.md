@@ -11,3 +11,6 @@ Looking into this there as a framework called Severless which makes deployment h
 
 Severless
 https://www.serverless.com/open-source/
+
+Running `serverless` walks through a quick set up. 
+Calling `serverless deploy` redeploys the application 
