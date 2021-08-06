@@ -7,7 +7,7 @@ bp = Blueprint('', __name__)
 @bp.route('/index')
 def index():
 
-    response = requests.get("https://qnzfldut9f.execute-api.us-east-1.amazonaws.com/dev/")
+    response = requests.get("https://kb7von0xk1.execute-api.us-east-1.amazonaws.com/dev/")
     message = response.json()['message']
 
     return render_template('index.html', message=message)
