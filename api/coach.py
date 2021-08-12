@@ -13,7 +13,7 @@ def index(event=None, context=None):
 
     return response
 
-@app.route('/coach/put', methods=['PUT'])
+@app.route('/coach', methods=['PUT'])
 def put_coach(event=None, context=None):
     
     details = request.json
@@ -21,9 +21,7 @@ def put_coach(event=None, context=None):
     # Build coach object
     coach = {
         "Email": details['Email'],
-        "Name": details['Name'],
-        "Age": details['Age'],
-        "WeightClass": details['WeightClass'],
+        "Name": details['Name']
     }
 
     body = {
@@ -38,21 +36,21 @@ def put_coach(event=None, context=None):
 
     return response
 
-@app.route('/coach/get', methods=['GET'])
+@app.route('/coach', methods=['GET'])
 def get_coach(event=None, context=None):
     
-    if 'id' in request.args:
+    if 'Email' in request.args:
 
         body = {
             "message": "Reading coach",
-            "id": request.args.get('id'),
+            "Email": request.args.get('Email'),
             "input": event,
         }
 
     else:
 
         body = {
-            "message": "No id, reading all coachs",
+            "message": "No Email, reading all coachs",
             "input": event,
         }
 
@@ -60,7 +58,7 @@ def get_coach(event=None, context=None):
 
     return response
 
-@app.route('/coach/patch', methods=['PATCH'])
+@app.route('/coach', methods=['PATCH'])
 def patch_coach(event=None, context=None):
     
     details = request.json
@@ -68,9 +66,7 @@ def patch_coach(event=None, context=None):
     # Build coach object
     coach = {
         "Email": details['Email'],
-        "Name": details['Name'],
-        "Age": details['Age'],
-        "WeightClass": details['WeightClass'],
+        "Name": details['Name']
     }
 
     body = {
@@ -85,20 +81,20 @@ def patch_coach(event=None, context=None):
 
     return response
 
-@app.route('/coach/delete', methods=['DELETE'])
+@app.route('/coach', methods=['DELETE'])
 def delete_coach(event=None, context=None):
     
-    if 'id' in request.args:
+    if 'Email' in request.args:
 
         body = {
-            "message": f"Deleting coach: {request.args.get('id')}",
+            "message": f"Deleting coach: {request.args.get('Email')}",
             "input": event
         }
 
     else:
 
         body = {
-            "message": "No id, cannot delete",
+            "message": "No Email, cannot delete",
             "input": event,
         }
 
