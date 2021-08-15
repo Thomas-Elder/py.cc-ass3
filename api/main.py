@@ -89,15 +89,21 @@ def patch_athlete(event=None, context=None):
         "Name": details['Name'],
         "Age": details['Age'],
         "WeightClass": details['WeightClass'],
+        "Sessions": []
     }
+
+    dynamodb = boto3.resource('dynamodb')
+
+    table = dynamodb.Table('Athletes')
+    response = table.put_item(
+       Item=athlete
+    )
 
     body = {
         "message": "Updating athlete",
-        "athlete": athlete,
+        "result": athlete,
         "input": event,
     }
-
-    # Update DB
 
     response = {"statusCode": 200, "body": json.dumps(body)}
 
@@ -106,17 +112,27 @@ def patch_athlete(event=None, context=None):
 @app.route('/athlete', methods=['DELETE'])
 def delete_athlete(event=None, context=None):
     
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('Athletes')
+
     if 'Email' in request.args:
 
+        athlete = table.delete_item(Key={'Email': request.args.get('Email')})
+
         body = {
-            "message": f"Deleting athlete: {request.args.get('Email')}",
-            "input": event
+            "message": "Deleting athlete",
+            "result": athlete,
+            "input": event,
         }
 
     else:
 
+        response = table.scan()
+        athletes = response['Items']
+
         body = {
-            "message": "No Email, cannot delete",
+            "message": "No Email, cannot delete athlete",
+            "result": "",
             "input": event,
         }
 
