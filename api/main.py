@@ -1,5 +1,6 @@
 
-import json
+import json, boto3
+import re
 from flask import Flask, request
 app = Flask(__name__)
 
@@ -26,15 +27,21 @@ def put_athlete(event=None, context=None):
         "Name": details['Name'],
         "Age": details['Age'],
         "WeightClass": details['WeightClass'],
+        "Sessions": []
     }
+
+    dynamodb = boto3.resource('dynamodb')
+
+    table = dynamodb.Table('Athletes')
+    response = table.put_item(
+       Item=athlete
+    )
 
     body = {
         "message": "Creating athlete",
-        "athlete": athlete,
+        "result": athlete,
         "input": event,
     }
-
-    # Update DB
 
     response = {"statusCode": 200, "body": json.dumps(body)}
 
@@ -43,18 +50,27 @@ def put_athlete(event=None, context=None):
 @app.route('/athlete', methods=['GET'])
 def get_athlete(event=None, context=None):
     
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('Athletes')
+
     if 'Email' in request.args:
+
+        athlete = table.get_item(Key={'Email': request.args.get('Email')})
 
         body = {
             "message": "Reading athlete",
-            "Email": request.args.get('Email'),
+            "result": athlete,
             "input": event,
         }
 
     else:
 
+        response = table.scan()
+        athletes = response['Items']
+
         body = {
             "message": "No Email, reading all athletes",
+            "result": athletes,
             "input": event,
         }
 
