@@ -14,10 +14,13 @@ def create_application(test_config=None):
     application.register_blueprint(athlete.bp)
     application.register_blueprint(coach.bp)
 
+    from .api import load_user
+
     loginManager = LoginManager(application)
     @loginManager.user_loader
     def load_user(id):
         # set up get_user function somewhere, or maybe just call API here?
+        load_user(id)
         pass
 
     return application
