@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, g
 import requests
+from ..api import get_athlete, get_coach
 
 bp = Blueprint('', __name__)
 
@@ -7,7 +8,5 @@ bp = Blueprint('', __name__)
 @bp.route('/index')
 def index():
 
-    response = requests.get("https://4oodow0413.execute-api.us-east-1.amazonaws.com/dev/athlete")
-    message = response.json()['message']
-
+    message = get_athlete("test@gmail.com").email
     return render_template('index.html', message=message)
