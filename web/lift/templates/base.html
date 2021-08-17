@@ -27,11 +27,21 @@
 
           <div class="dropdown">
             <button class="btn btn-outline-primary dropdown-toggle" type="button" id="sessionDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Coaches
+            </button>
+            <div class="dropdown-menu" aria-labelledby="sessionDropDown">
+              <a class="nav-item nav-link" href="{{ url_for('coach.sessions')}}">Sessions</a>
+              <a class="nav-item nav-link" href="{{ url_for('coach.athletes')}}">Athletes</a>
+            </div>
+          </div> 
+
+          <div class="dropdown">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="sessionDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Sessions
             </button>
             <div class="dropdown-menu" aria-labelledby="sessionDropDown">
-              <a class="nav-item nav-link" href="{{ url_for('session.new')}}">New Session</a>
-              <a class="nav-item nav-link" href="{{ url_for('session.history')}}">Session History</a>
+              <a class="nav-item nav-link" href="{{ url_for('athlete.session_new')}}">New Session</a>
+              <a class="nav-item nav-link" href="{{ url_for('athlete.session_history')}}">Session History</a>
             </div>
           </div> 
 
@@ -40,7 +50,7 @@
               Exercises
             </button>
             <div class="dropdown-menu" aria-labelledby="exerciseDropDown">
-              <a class="nav-item nav-link" href="{{ url_for('exercise.history')}}">Exercise History</a>
+              <a class="nav-item nav-link" href="{{ url_for('athlete.exercise_history')}}">Exercise History</a>
             </div>
           </div> 
           
