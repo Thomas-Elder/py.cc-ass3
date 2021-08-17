@@ -4,11 +4,11 @@ import requests
 bp = Blueprint('coach', __name__)
 
 @bp.route('/coach/athletes')
-def history():
+def athletes():
 
     return render_template('coach/athletes.html')
 
 @bp.route('/coach/sessions')
-def new():
+def sessions():
 
     return render_template('coach/sessions.html')
