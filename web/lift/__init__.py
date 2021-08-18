@@ -9,10 +9,11 @@ def create_application(test_config=None):
     application.config.from_mapping(SECRET_KEY='dev')
 
     from .routes import index
-    from .routes import athlete, coach
+    from .routes import athlete, coach, authentication
     application.register_blueprint(index.bp)  
     application.register_blueprint(athlete.bp)
     application.register_blueprint(coach.bp)
+    application.register_blueprint(authentication.bp)
 
     from .api import load_user
 
