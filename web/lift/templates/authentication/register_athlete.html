@@ -28,6 +28,20 @@
             {% endfor %}
         </div>
         <div>
+            {{ form.age.label }}<br>
+            {{ form.age(size=32) }}<br>
+            {% for error in form.age.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.weightclass.label }}<br>
+            {{ form.weightclass(size=32) }}<br>
+            {% for error in form.weightclass.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
             {{ form.submit(class_="btn btn-primary") }}
         </div>
     </form>
