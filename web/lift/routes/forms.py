@@ -1,6 +1,6 @@
 from boto3.docs.docstring import AttributeDocstring
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, PasswordField
+from wtforms import StringField, SubmitField, TextAreaField, PasswordField, IntegerField
 from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import DataRequired
 
@@ -10,7 +10,7 @@ class RegisterAthleteForm(FlaskForm):
     email = StringField('email', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
     name = StringField('name', validators=[DataRequired()])
-    age = StringField('age', validators=[DataRequired()])
+    age = IntegerField('age', validators=[DataRequired()])
     weightclass = StringField('weightclass', validators=[DataRequired()])  
     submit = SubmitField('register')
 
