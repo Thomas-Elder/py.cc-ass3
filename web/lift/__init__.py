@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from flask_login import login_manager, login_user, logout_user, login_required, current_user, LoginManager
+from .api import get_user
 
 def create_application(test_config=None):
     # create and configure the application
@@ -15,13 +16,9 @@ def create_application(test_config=None):
     application.register_blueprint(coach.bp)
     application.register_blueprint(authentication.bp)
 
-    from .api import load_user
-
     loginManager = LoginManager(application)
     @loginManager.user_loader
     def load_user(id):
-        # set up get_user function somewhere, or maybe just call API here?
-        load_user(id)
-        pass
+        return get_user(id)
 
     return application
