@@ -17,10 +17,10 @@ def register_athlete():
 
         if form.validate_on_submit():
 
-            put_athlete(Athlete(form.email.data, form.name.data, form.age.data, form.weightclass.data))
+            put_athlete(Athlete(form.email.data, form.name.data, form.age.data, form.weightclass.data, []))
             put_user(User(form.email.data, form.email.data, form.password.data, False))
-            login_user(get_user(form.email.data))
-            return redirect(url_for('index'))
+
+            return redirect(url_for('authentication.login'))
 
         else:
             return render_template('authentication/register_athlete.html', current_user=current_user, form=form)
@@ -38,8 +38,8 @@ def register_coach():
         if form.validate_on_submit():
             put_coach(Coach(form.email.data, form.name.data))
             put_user(User(form.email.data, form.email.data, form.password.data, True))
-            login_user(get_user(form.email.data))
-            return redirect(url_for('index'))
+
+            return redirect(url_for('authentication.login'))
 
         else:
             return render_template('authentication/register_coach.html', current_user=current_user, form=form)
@@ -57,6 +57,7 @@ def login():
 
         if form.validate_on_submit():
             login_user(get_user(form.email.data))
+
             return redirect(url_for('index'))
 
         else:
