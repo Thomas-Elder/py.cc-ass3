@@ -25,35 +25,20 @@
 
           <a class="btn btn-outline-primary" href="{{ url_for('index')}}">Index</a>
 
-          <div class="dropdown">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="sessionDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Coaches
-            </button>
-            <div class="dropdown-menu" aria-labelledby="sessionDropDown">
-              <a class="nav-item nav-link" href="{{ url_for('coach.sessions')}}">Sessions</a>
-              <a class="nav-item nav-link" href="{{ url_for('coach.athletes')}}">Athletes</a>
-            </div>
-          </div> 
-
-          <div class="dropdown">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="sessionDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Sessions
-            </button>
-            <div class="dropdown-menu" aria-labelledby="sessionDropDown">
-              <a class="nav-item nav-link" href="{{ url_for('athlete.session_new')}}">New Session</a>
-              <a class="nav-item nav-link" href="{{ url_for('athlete.session_history')}}">Session History</a>
-            </div>
-          </div> 
-
-          <div class="dropdown">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="exerciseDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Exercises
-            </button>
-            <div class="dropdown-menu" aria-labelledby="exerciseDropDown">
-              <a class="nav-item nav-link" href="{{ url_for('athlete.exercise_history')}}">Exercise History</a>
-            </div>
-          </div> 
-          
+          {% if not current_user.is_authenticated %}
+          <a class="nav-item nav-link" href="{{ url_for('authentication.login')}}">Login</a>
+          <a class="nav-item nav-link" href="{{ url_for('authentication.register_athlete')}}">Athlete Registration</a>
+          <a class="nav-item nav-link" href="{{ url_for('authentication.register_coach')}}">Coach Registration</a>
+          {% else %}
+            {% if current_user.coach %}
+            <a class="nav-item nav-link" href="{{ url_for('coach.sessions')}}">Sessions</a>
+            <a class="nav-item nav-link" href="{{ url_for('coach.athletes')}}">Athletes</a>
+            {% else %}
+            <a class="nav-item nav-link" href="{{ url_for('athlete.session_new')}}">New Session</a>
+            <a class="nav-item nav-link" href="{{ url_for('athlete.session_history')}}">Session History</a>
+            <a class="nav-item nav-link" href="{{ url_for('athlete.exercise_history')}}">Exercise History</a>
+            {% endif %} 
+          {% endif %} 
         </div>
     </nav>
     <!-- Your page content -->
