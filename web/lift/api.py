@@ -1,99 +1,122 @@
 from os import replace
 import re
 import requests
+import json
 
-from .models import User
+from .models import User, Athlete, Coach
 
 API_STRING = "https://4oodow0413.execute-api.us-east-1.amazonaws.com/dev/"
+API_user = API_STRING + "user"
 API_athlete = API_STRING + "athlete"
-API_coach = API_STRING + "coach/"
+API_coach = API_STRING + "coach"
 
 def load_user(id):
     """
     load_user
     Gets the user details from the API, for use by flask_login for tracking current_user.
     """
+    response = requests.get(API_user + f"?Email={id}")
 
-    response = requests.get(API_athlete + f"?Email={id}")
+    result = response.json()['result']
+    return User(result['Email'], result['Email'], result['Password'], result['Coach'])
+
+def get_user(id):
+    """
+    load_user
+    Gets the user details from the API, for use by flask_login for tracking current_user.
+    """
+    response = requests.get(API_user + f"?Email={id}")
+
+    result = response.json()['result']
+    return User(result['Email'], result['Email'], result['Password'], result['Coach'])
+
+
+def put_user(user: User):
+    """
+    load_user
+    Gets the user details from the API, for use by flask_login for tracking current_user.
+    """
+    json_user = {
+        "Email": user.email,
+        "Password": user.password,
+        "Coach": user.coach
+    }
+
+    response = requests.put(API_user, json=json_user)
+
+    return response
+
+def check_email_unique(email: str) -> bool:
+    """
+    check_email_unique
     
-    if response.status_code is 200:
-        athlete = response.json()['result']
-        user = User(athlete['Email'], athlete['Email'], "", athlete['Name'], athlete['WeightClass'], athlete['Sessions'], coach=False)
+    Returns true if the given email is not already in the database.
+    """
+    user = get_user(email)
+
+    return user is None
+
+def check_password(email: str, password: str) -> bool:
+    """
+    check_password
+
+    Returns true if the password stored with the email matches.
+    """
+    user = get_user(email=email)
+    
+    if user is None:
+        return False
     else:
-        response = requests.get(API_coach + f"?Email={id}")
+        return user.password == password
 
-        if response.status_code is 200:
-            coach = response.json()['result']
-            user = User(coach['Email'], coach['Email'], "", coach['Name'], coach['WeightClass'], coach['Sessions'], coach=True)
-
-    return user
-
-def get_athlete(id: str=None):
+def get_athlete(id: str):
     """
     get_athlete
     Gets the athlete details from the API for this id.
     """
 
-    if id is None:
-        response = requests.get(API_athlete)
+    response = requests.get(API_athlete + f"?Email={id}")
 
-        if response.status_code is 200:
-            users = []
-
-            for athlete in response.json()['result']:
-                users.append(User(athlete['Email'], athlete['Email'], "", athlete['Name'], athlete['WeightClass'], athlete['Sessions'], coach=False))
-
-            return response.json()['result']
-
-    else:
-        response = requests.get(API_athlete + f"?Email={id}")
-        print(response.json()['result'])
-
-        if response.status_code is 200:
-            athlete = response.json()['result']['Item']
-            user = User(athlete['Email'], athlete['Email'], "", athlete['Name'], athlete['WeightClass'], athlete['Sessions'], coach=False)
-
-            return user
+    result = response.json()['result']
+    return Athlete(result['Email'], result['Email'], result['Name'], result['Age'], result['Weightclass'], result['Sessions'])
 
 
-def put_athlete(athlete: User):
+def put_athlete(athlete: Athlete):
     """
     put_athlete
     Puts the passed athlete to the API.
     """
-    # JSON User object
-    requests.put(API_athlete, athlete)
+    json_athlete = {
+        "Email": athlete.email,
+        "Password": athlete.password,
+        "Name": athlete.name,
+        "Age": athlete.age,
+        "Weightclass": athlete.weightclass,
+        "Sessions": athlete.sessions
+    }
+
+    response = requests.put(API_athlete, json_athlete)
+    return response
 
 def get_coach(id: str):
     """
     get_coach
     Gets the coach details from the API for this id.
     """
-    if id is None:
-        response = requests.get(API_coach)
+    response = requests.get(API_coach + f"?Email={id}")
 
-        if response.status_code is 200:
-            users = []
+    result = response.json()['result']
+    return Coach(result['Email'], result['Name'], result['Athletes'])
 
-            for coach in response.json()['result']:
-                users.append(User(coach['Email'], coach['Email'], "", coach['Name'], coach['WeightClass'], coach['Sessions'], coach=True))
-
-            return response.json()['result']
-
-    else:
-        response = requests.get(API_coach + f"?Email={id}")
-        print(response.json()['result'])
-
-        if response.status_code is 200:
-            coach = response.json()['result']['Item']
-            user = User(coach['Email'], coach['Email'], "", coach['Name'], coach['WeightClass'], coach['Sessions'], coach=True)
-
-            return user
-
-def put_coach(coach: User):
+def put_coach(coach: Coach):
     """
     put_coach
     Puts the passed coach to the API.
     """
-    # JSON User object
-    requests.put("https://4oodow0413.execute-api.us-east-1.amazonaws.com/dev/athlete/", coach)
+    json_coach = {
+        "Email": coach.email,
+        "Name": coach.name,
+        "Athletes": coach.athletes
+    }
+
+    requests.put(API_coach, json_coach)
