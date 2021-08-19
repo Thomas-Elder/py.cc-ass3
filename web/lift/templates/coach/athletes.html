@@ -2,11 +2,14 @@
 
 {% block content %}
 <div class="container">
-    <h3>Athletes</h3>
-    List coach's athletes
-
-    {% for athlete in athletes %}
+    <h3>New Athlete</h3>
+    Form for new athlete, list all athletes, and able to select one 
+    {% for athlete in all_athletes %}
         {{ athlete.name }} {{ athlete.weightclass }}
+    {% endfor %}
+    <h3>My Athletes</h3>
+    {% for coach_athlete in coach_athletes %}
+        {{ coach_athlete.name }} {{ coach_athlete.weightclass }}
     {% endfor %}
 </div>
 {% endblock %}
