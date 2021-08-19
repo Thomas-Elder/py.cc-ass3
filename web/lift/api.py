@@ -72,10 +72,10 @@ def get_athlete(id: str):
 
     result = response.json()['result']['Item']
 
-    if result['Coach'] == "":
-        coach = None
-    else:
+    if 'Coach' in result:
         coach = result['Coach']
+    else:
+        coach = None
     
     return Athlete(result['Email'], result['Name'], result['Age'], result['WeightClass'], coach=coach, sessions=result['Sessions'])
 
@@ -91,10 +91,10 @@ def get_athletes():
     athletes = []
     for result in results:
 
-        if result['Coach'] == "":
-            coach = None
-        else:
+        if 'Coach' in result:
             coach = result['Coach']
+        else:
+            coach = None
         
         athletes.append(Athlete(result['Email'], result['Name'], result['Age'], result['WeightClass'], coach=coach, sessions=result['Sessions']))
 
@@ -106,6 +106,7 @@ def put_athlete(athlete: Athlete):
     put_athlete
     Puts the passed athlete to the API.
     """
+
     json_athlete = {
         "Email": athlete.email,
         "Name": athlete.name,
@@ -134,10 +135,11 @@ def put_coach(coach: Coach):
     put_coach
     Puts the passed coach to the API.
     """
+
     json_coach = {
         "Email": coach.email,
         "Name": coach.name,
         "Athletes": coach.athletes
     }
 
-    requests.put(API_coach, json_coach)
+    requests.put(API_coach, json=json_coach)
