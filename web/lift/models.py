@@ -28,4 +28,11 @@ class Coach():
         self.name = name
         
         self.athletes = athletes
+
+class Session():
+
+    def __init__(self, key, date, exercises) -> None:
+        self.key = key
+        self.date = date
+        self.exercises = exercises
     
