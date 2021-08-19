@@ -67,11 +67,11 @@ def get_athlete(id: str):
     get_athlete
     Gets the athlete details from the API for this id.
     """
-
+    print(id)
     response = requests.get(API_athlete + f"?Email={id}")
-
-    result = response.json()['result']
-    return Athlete(result['Email'], result['Email'], result['Name'], result['Age'], result['WeightClass'], result['Sessions'])
+    print(response)
+    result = response.json()['result']['Item']
+    return Athlete(result['Email'], result['Name'], result['Age'], result['WeightClass'], result['Sessions'])
 
 
 def put_athlete(athlete: Athlete):
@@ -97,7 +97,8 @@ def get_coach(id: str):
     """
     response = requests.get(API_coach + f"?Email={id}")
 
-    result = response.json()['result']
+    result = response.json()['result']['Item']
+
     return Coach(result['Email'], result['Name'], result['Athletes'])
 
 def put_coach(coach: Coach):
