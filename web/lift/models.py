@@ -12,12 +12,13 @@ class User(UserMixin):
 
 class Athlete():
 
-    def __init__(self, email, name, age, weightclass, sessions=[]):
+    def __init__(self, email, name, age, weightclass, coach=None, sessions=[]):
         self.email = email
         self.name = name
         self.age = age
         self.weightclass = weightclass
-        
+
+        self.coach = coach
         self.sessions = sessions
 
 class Coach():
