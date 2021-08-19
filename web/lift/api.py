@@ -67,11 +67,26 @@ def get_athlete(id: str):
     get_athlete
     Gets the athlete details from the API for this id.
     """
-    print(id)
+
     response = requests.get(API_athlete + f"?Email={id}")
-    print(response)
+
     result = response.json()['result']['Item']
     return Athlete(result['Email'], result['Name'], result['Age'], result['WeightClass'], result['Sessions'])
+
+def get_athletes():
+    """
+    get_athletes
+    Gets all athletes details from the API.
+    """
+
+    response = requests.get(API_athlete)
+
+    results = response.json()['result']['Items']
+    athletes = []
+    for result in results:
+        athletes.append(Athlete(result['Email'], result['Name'], result['Age'], result['WeightClass'], result['Sessions']))
+        
+    return athletes
 
 
 def put_athlete(athlete: Athlete):
