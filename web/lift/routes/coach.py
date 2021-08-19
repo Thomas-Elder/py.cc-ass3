@@ -1,5 +1,6 @@
+
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, g
-import requests
+from ..api import get_athlete, get_coach
 from flask_login import login_user, logout_user, login_required, current_user
 
 bp = Blueprint('coach', __name__)
@@ -8,7 +9,14 @@ bp = Blueprint('coach', __name__)
 @bp.route('/coach/athletes')
 def athletes():
 
-    return render_template('coach/athletes.html', current_user=current_user)
+    athlete_emails = get_coach(current_user.id).athletes
+
+    athletes = []
+
+    for email in athlete_emails:
+        athletes.append(get_athlete(email))
+
+    return render_template('coach/athletes.html', current_user=current_user, athletes=athletes)
 
 @login_required
 @bp.route('/coach/sessions')
