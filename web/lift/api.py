@@ -3,12 +3,13 @@ import re
 import requests
 import json
 
-from .models import User, Athlete, Coach
+from .models import User, Athlete, Coach, Session
 
 API_STRING = "https://4oodow0413.execute-api.us-east-1.amazonaws.com/dev/"
 API_user = API_STRING + "user"
 API_athlete = API_STRING + "athlete"
 API_coach = API_STRING + "coach"
+API_session = API_STRING + "session"
 
 def get_user(id):
     """
@@ -143,3 +144,35 @@ def put_coach(coach: Coach):
     }
 
     requests.put(API_coach, json=json_coach)
+
+def get_sessions():
+    """
+    get_sessions
+    Gets all session details from the API.
+    """
+
+    response = requests.get(API_session)
+
+    results = response.json()['result']['Items']
+    sessions = []
+    for result in results:
+        
+        sessions.append(Session(result['Key'], result['Date'], result['Exercises']))
+
+    return sessions
+
+
+def put_session(session: Session):
+    """
+    put_session
+    Puts the passed session to the API.
+    """
+
+    json_session = {
+        "Key": session.key,
+        "Date": session.date,
+        "Exercises": session.exercises
+    }
+
+    response = requests.put(API_session, json=json_session)
+    return response
