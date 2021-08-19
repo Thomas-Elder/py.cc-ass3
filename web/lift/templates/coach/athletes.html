@@ -5,7 +5,17 @@
     <h3>New Athlete</h3>
     Form for new athlete, list all coachless athletes, and able to select one 
     {% for athlete in coachless_athletes %}
-        {{ athlete.name }} {{ athlete.weightclass }}
+        
+        <div class="card">
+            <h5>{{ athlete.name }}</h5> 
+            Age : {{ athlete.age }}
+            Weight Class: {{ athlete.weightclass }}
+
+            <form action="{{url_for('coach.athletes_add')}}" method="POST">
+                <input type="hidden" value="{{athlete.email}}" name="Email">
+                <button type="submit"class="btn-primary">Add</button>
+            </form>
+        </div>
     {% endfor %}
     <h3>My Athletes</h3>
     {% for coach_athlete in coach_athletes %}
