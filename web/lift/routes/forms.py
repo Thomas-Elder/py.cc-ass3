@@ -60,3 +60,6 @@ class LoginForm(FlaskForm):
 
             self.password.errors.append('email or password is invalid')
             return False
+
+class SessionForm(FlaskForm):
+    pass
