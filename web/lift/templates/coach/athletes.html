@@ -4,5 +4,9 @@
 <div class="container">
     <h3>Athletes</h3>
     List coach's athletes
+
+    {% for athlete in athletes %}
+        {{ athlete.name }} {{ athlete.weightclass }}
+    {% endfor %}
 </div>
 {% endblock %}
