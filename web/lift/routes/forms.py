@@ -10,7 +10,7 @@ class RegisterAthleteForm(FlaskForm):
     email = StringField('email', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
     name = StringField('name', validators=[DataRequired()])
-    age = IntegerField('age', validators=[DataRequired()])
+    age = StringField('age', validators=[DataRequired()])
     weightclass = StringField('weightclass', validators=[DataRequired()])  
     submit = SubmitField('register')
 
