@@ -32,6 +32,9 @@ def athletes_add():
 
     return redirect(url_for('coach.athletes'))
 
+#
+# Not implemented
+#
 @login_required
 @bp.route('/coach/sessions', methods=['GET'])
 def sessions():
