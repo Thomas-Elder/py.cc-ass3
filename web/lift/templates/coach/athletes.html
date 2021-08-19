@@ -3,8 +3,8 @@
 {% block content %}
 <div class="container">
     <h3>New Athlete</h3>
-    Form for new athlete, list all athletes, and able to select one 
-    {% for athlete in all_athletes %}
+    Form for new athlete, list all coachless athletes, and able to select one 
+    {% for athlete in coachless_athletes %}
         {{ athlete.name }} {{ athlete.weightclass }}
     {% endfor %}
     <h3>My Athletes</h3>
