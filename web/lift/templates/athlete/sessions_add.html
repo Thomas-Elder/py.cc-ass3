@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h5>Add New Session</h5>
+    <div class="card">
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.date.label }}<br>
+                {{ form.date(size=32) }}<br>
+                {% for error in form.date.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+
+            {% for exerciseform in form.exercises %}
+                <div class="card">
+                    <div>
+                        {{ exerciseform.exercise.label }}<br>
+                        {{ exerciseform.exercise }}<br>
+                    </div>            
+                    <div>
+                        {{ exerciseform.repetitions.label }}<br>
+                        {{ exerciseform.repetitions }}<br>
+                    </div>
+                    <div>
+                        {{ exerciseform.sets.label }}<br>
+                        {{ exerciseform.sets }}<br>
+                    </div>
+                    <div>
+                        {{ exerciseform.weight.label }}<br>
+                        {{ exerciseform.weight }}<br>
+                    </div>
+                </div>
+            {% endfor %}
+            <div>
+                {{ form.submit(class_="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
