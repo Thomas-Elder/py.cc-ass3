@@ -39,22 +39,23 @@ def session_add():
 
     form = SessionForm()
 
-    if form.validate_on_submit():
+    if form.date.data is not None:
 
         exercises = []
 
-        for i in range(5):
-            exercises.append({
-                "Name": form[f'exercises-{i}-exercise'],
-                "Repetitions": form[f'exercises-{i}-repetitions'],
-                "Sets": form[f'exercises-{i}-sets'],
-                "Weight": form[f'exercises-{i}-weight']
-            })
+        for exercise in form.exercises.data:
+            if exercise['variation'] != "":
+                exercises.append({
+                    "Name": exercise['variation'],
+                    "Repetitions": exercise['repetitions'],
+                    "Sets": exercise['sets'],
+                    "Weight": exercise['weight']
+                })
 
         key = datetime.now().strftime("%c")
         session = Session(key, request.form['date'], exercises)
         put_session(session, current_user.id)
 
-        return redirect(url_for('athlete.session'))
+        return redirect(url_for('athlete.sessions'))
     else:
         return render_template('athlete/sessions_add.html', current_user=current_user, form=form)
