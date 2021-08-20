@@ -1,6 +1,6 @@
 from boto3.docs.docstring import AttributeDocstring
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, PasswordField, IntegerField
+from wtforms import StringField, SubmitField, TextAreaField, PasswordField, IntegerField, DateField, FieldList, FormField
 from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import DataRequired
 
@@ -61,5 +61,13 @@ class LoginForm(FlaskForm):
             self.password.errors.append('email or password is invalid')
             return False
 
+class ExerciseForm(FlaskForm):
+    exercise = StringField('exercise')
+    repetitions = StringField('repetitions')
+    sets = StringField('sets')
+    weight = StringField('weight')
+
 class SessionForm(FlaskForm):
-    pass
+    date = DateField('date', validators=[DataRequired()])
+    exercises = FieldList(FormField(ExerciseForm), min_entries=5)
+    submit = SubmitField('submit')
