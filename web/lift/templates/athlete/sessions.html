@@ -2,8 +2,18 @@
 
 {% block content %}
 <div class="container">
-    <h3>Sessions</h3>
-    Form for adding new session
-    List athlete's sessions
+    <h5>My Sessions</h5>
+    <div>
+        {% for session in athlete_sessions %}
+            <div class="card">
+                Date: {{ session.date }}
+                {%for exercise in session.exercises %}
+                    <div class="card">
+                        {{ exercise }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
