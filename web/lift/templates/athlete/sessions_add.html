@@ -17,8 +17,8 @@
             {% for exerciseform in form.exercises %}
                 <div class="card">
                     <div>
-                        {{ exerciseform.exercise.label }}<br>
-                        {{ exerciseform.exercise }}<br>
+                        {{ exerciseform.variation.label }}<br>
+                        {{ exerciseform.variation }}<br>
                     </div>            
                     <div>
                         {{ exerciseform.repetitions.label }}<br>
@@ -34,6 +34,7 @@
                     </div>
                 </div>
             {% endfor %}
+            
             <div>
                 {{ form.submit(class_="btn btn-primary") }}
             </div>
