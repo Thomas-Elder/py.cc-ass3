@@ -62,12 +62,12 @@ class LoginForm(FlaskForm):
             return False
 
 class ExerciseForm(FlaskForm):
-    exercise = StringField('exercise')
+    variation = StringField('variation')
     repetitions = StringField('repetitions')
     sets = StringField('sets')
     weight = StringField('weight')
 
 class SessionForm(FlaskForm):
-    date = DateField('date', validators=[DataRequired()])
+    date = DateField('date')
     exercises = FieldList(FormField(ExerciseForm), min_entries=5)
     submit = SubmitField('submit')
