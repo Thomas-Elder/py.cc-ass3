@@ -31,12 +31,10 @@
           <a class="nav-item nav-link" href="{{ url_for('authentication.register_coach')}}">Coach Registration</a>
           {% else %}
             {% if current_user.coach %}
-            <a class="nav-item nav-link" href="{{ url_for('coach.sessions')}}">Sessions</a>
             <a class="nav-item nav-link" href="{{ url_for('coach.athletes')}}">Athletes</a>
             {% else %}
-            <a class="nav-item nav-link" href="{{ url_for('athlete.session_new')}}">New Session</a>
-            <a class="nav-item nav-link" href="{{ url_for('athlete.session_history')}}">Session History</a>
-            <a class="nav-item nav-link" href="{{ url_for('athlete.exercise_history')}}">Exercise History</a>
+            <a class="nav-item nav-link" href="{{ url_for('athlete.sessions')}}">My Sessions</a>
+            <a class="nav-item nav-link" href="{{ url_for('athlete.session_add')}}">Add Session</a>
             {% endif %} 
 
             <a class="nav-item nav-link" href="{{ url_for('authentication.logout')}}">Logout</a>
