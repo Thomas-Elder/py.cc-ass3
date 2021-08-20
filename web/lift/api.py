@@ -153,7 +153,10 @@ def get_sessions():
 
     response = requests.get(API_session)
 
-    results = response.json()['result']['Items']
+    results = response.json()['result']
+
+    #print(f'response.json() {response.json()}')
+
     sessions = []
     for result in results:
         
@@ -162,7 +165,7 @@ def get_sessions():
     return sessions
 
 
-def put_session(session: Session):
+def put_session(session: Session, email: str):
     """
     put_session
     Puts the passed session to the API.
@@ -174,5 +177,22 @@ def put_session(session: Session):
         "Exercises": session.exercises
     }
 
+    # Add session to Sessions table
     response = requests.put(API_session, json=json_session)
+
+    athlete = get_athlete(email)
+    athlete.sessions.append(session.key)
+
+    json_athlete = {
+        "Email": athlete.email,
+        "Name": athlete.name,
+        "Age": athlete.age,
+        "WeightClass": athlete.weightclass,
+        "Coach": athlete.coach,
+        "Sessions": athlete.sessions
+    }
+
+    # Add session to this athlete 
+    response = requests.put(API_athlete, json=json_athlete)
+    
     return response
