@@ -9,7 +9,10 @@
                 Date: {{ session.date }}
                 {%for exercise in session.exercises %}
                     <div class="card">
-                        {{ exercise }}
+                        Name: {{ exercise['Name'] }} </br>
+                        Sets: {{ exercise['Sets'] }} </br>
+                        Repetitions: {{ exercise['Repetitions'] }} </br>
+                        Weight: {{ exercise['Weight'] }} </br>
                     </div>
                 {% endfor %}
             </div>
