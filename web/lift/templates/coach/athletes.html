@@ -19,7 +19,26 @@
     {% endfor %}
     <h3>My Athletes</h3>
     {% for coach_athlete in coach_athletes %}
-        {{ coach_athlete.name }} {{ coach_athlete.weightclass }}
+         
+        <div class="card">
+            <h5>{{ coach_athlete.name }}</h5>
+            Weight Class: {{ coach_athlete.weightclass }}
+            <div>
+                {% for session in coach_athlete.sessions %}
+                    <div class="card">
+                        Date: {{ session.date }}
+                        {%for exercise in session.exercises %}
+                            <div class="card">
+                                Name: {{ exercise['Name'] }} </br>
+                                Sets: {{ exercise['Sets'] }} </br>
+                                Repetitions: {{ exercise['Repetitions'] }} </br>
+                                Weight: {{ exercise['Weight'] }} </br>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     {% endfor %}
 </div>
 {% endblock %}
