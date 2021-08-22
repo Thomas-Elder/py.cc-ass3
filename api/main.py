@@ -157,22 +157,27 @@ def delete_athlete(event=None, context=None):
 @app.route('/session', methods=['PUT'])
 def put_session(event=None, context=None):
     
-    details = request.json
-
+    details = json.loads(event['body'])
+    
     # Build session object
     session = {
-        "Id": details['Id'],
-        "Date": details['Date'],
-        "Exercises": details['Exercises']
+        "Key": details["Key"],
+        "Date": details["Date"],
+        "Exercises": details["Exercises"]
     }
+
+    dynamodb = boto3.resource('dynamodb')
+
+    table = dynamodb.Table('Sessions')
+    response = table.put_item(
+       Item=session
+    )
 
     body = {
-        "message": "Creating session",
-        "session": session,
-        "input": event
+        "message": "Putting session",
+        "result": session,
+        "input": event,
     }
-
-    # Update DB
 
     response = {"statusCode": 200, "body": json.dumps(body)}
 
@@ -181,19 +186,32 @@ def put_session(event=None, context=None):
 @app.route('/session', methods=['GET'])
 def get_session(event=None, context=None):
     
-    if 'id' in request.args:
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('Sessions')
+
+    queryStringParameters = event['queryStringParameters']
+
+    if queryStringParameters is not None:
+
+        key = event['queryStringParameters']['Key']
+
+        session = table.get_item(Key={'Key': key})
 
         body = {
             "message": "Reading session",
-            "id": request.args.get('id'),
-            "input": event
+            "result": session,
+            "input": event,
         }
 
     else:
 
+        response = table.scan()
+        sessions = response['Items']
+
         body = {
-            "message": "No id, reading all sessions",
-            "input": event
+            "message": "No Key, reading all sessions",
+            "result": sessions,
+            "input": event,
         }
 
     response = {"statusCode": 200, "body": json.dumps(body)}
@@ -203,22 +221,27 @@ def get_session(event=None, context=None):
 @app.route('/session', methods=['PATCH'])
 def patch_session(event=None, context=None):
     
-    details = request.json
-
+    details = json.loads(event['body'])
+    
     # Build session object
     session = {
-        "Id": details['Id'],
-        "Date": details['Date'],
-        "Exercises": details['Exercises']
+        "Key": details["Key"],
+        "Date": details["Date"],
+        "Exercises": details["Exercises"]
     }
+
+    dynamodb = boto3.resource('dynamodb')
+
+    table = dynamodb.Table('Sessions')
+    response = table.put_item(
+       Item=session
+    )
 
     body = {
-        "message": "Updating session",
-        "session": session,
-        "input": event
+        "message": "Patching session",
+        "result": session,
+        "input": event,
     }
-
-    # Update DB
 
     response = {"statusCode": 200, "body": json.dumps(body)}
 
@@ -227,17 +250,27 @@ def patch_session(event=None, context=None):
 @app.route('/session', methods=['DELETE'])
 def delete_session(event=None, context=None):
     
-    if 'id' in request.args:
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('Sessions')
+
+    queryStringParameters = event['queryStringParameters']
+
+    if queryStringParameters is not None:
+
+        key = event['queryStringParameters']['Key']
+
+        session = table.delete_item(Key={'Key': key})
 
         body = {
-            "message": f"Deleting session: {request.args.get('id')}",
-            "input": event
+            "message": "Deleting session",
+            "result": session,
+            "input": event,
         }
 
     else:
 
         body = {
-            "message": "No id, cannot delete",
+            "message": "No Key, cannot delete record",
             "input": event,
         }
 
@@ -249,21 +282,27 @@ def delete_session(event=None, context=None):
 @app.route('/coach', methods=['PUT'])
 def put_coach(event=None, context=None):
     
-    details = request.json
-
+    details = json.loads(event['body'])
+    
     # Build coach object
     coach = {
-        "Email": details['Email'],
-        "Name": details['Name']
+        "Email": details["Email"],
+        "Name": details["Name"],
+        "Athletes": details["Athletes"]
     }
+
+    dynamodb = boto3.resource('dynamodb')
+
+    table = dynamodb.Table('Coaches')
+    response = table.put_item(
+       Item=coach
+    )
 
     body = {
-        "message": "Creating coach",
-        "coach": coach,
+        "message": "Putting coach",
+        "result": coach,
         "input": event,
     }
-
-    # Update DB
 
     response = {"statusCode": 200, "body": json.dumps(body)}
 
@@ -272,18 +311,31 @@ def put_coach(event=None, context=None):
 @app.route('/coach', methods=['GET'])
 def get_coach(event=None, context=None):
     
-    if 'Email' in request.args:
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('Coaches')
+
+    queryStringParameters = event['queryStringParameters']
+
+    if queryStringParameters is not None:
+
+        email = event['queryStringParameters']['Email']
+
+        coach = table.get_item(Key={'Email': email})
 
         body = {
             "message": "Reading coach",
-            "Email": request.args.get('Email'),
+            "result": coach,
             "input": event,
         }
 
     else:
 
+        response = table.scan()
+        coaches = response['Items']
+
         body = {
-            "message": "No Email, reading all coachs",
+            "message": "No Email, reading all coaches",
+            "result": coaches,
             "input": event,
         }
 
@@ -294,21 +346,27 @@ def get_coach(event=None, context=None):
 @app.route('/coach', methods=['PATCH'])
 def patch_coach(event=None, context=None):
     
-    details = request.json
-
-    # Build coach object
+    details = json.loads(event['body'])
+    
+    # Build athlete object
     coach = {
-        "Email": details['Email'],
-        "Name": details['Name']
+        "Email": details["Email"],
+        "Name": details["Name"],
+        "Sessions": details["Sessions"]
     }
+
+    dynamodb = boto3.resource('dynamodb')
+
+    table = dynamodb.Table('Coaches')
+    response = table.put_item(
+       Item=coach
+    )
 
     body = {
-        "message": "Updating coach",
-        "coach": coach,
+        "message": "Patching coach",
+        "result": coach,
         "input": event,
     }
-
-    # Update DB
 
     response = {"statusCode": 200, "body": json.dumps(body)}
 
@@ -317,18 +375,92 @@ def patch_coach(event=None, context=None):
 @app.route('/coach', methods=['DELETE'])
 def delete_coach(event=None, context=None):
     
-    if 'Email' in request.args:
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('Coaches')
+
+    queryStringParameters = event['queryStringParameters']
+
+    if queryStringParameters is not None:
+
+        email = event['queryStringParameters']['Email']
+
+        coach = table.delete_item(Key={'Email': email})
 
         body = {
-            "message": f"Deleting coach: {request.args.get('Email')}",
-            "input": event
+            "message": "Deleting coach",
+            "result": coach,
+            "input": event,
         }
 
     else:
 
         body = {
-            "message": "No Email, cannot delete",
+            "message": "No Email, cannot delete record",
             "input": event,
+        }
+
+    response = {"statusCode": 200, "body": json.dumps(body)}
+
+    return response
+
+# User routes
+@app.route('/user', methods=['PUT'])
+def put_user(event=None, context=None):
+    
+    details = json.loads(event['body'])
+    
+    # Build athlete object
+    user = {
+        "Email": details["Email"],
+        "Password": details["Password"],
+        "Coach": details["Coach"]
+    }
+
+    dynamodb = boto3.resource('dynamodb')
+
+    table = dynamodb.Table('Users')
+    response = table.put_item(
+       Item=user
+    )
+
+    body = {
+        "message": "Putting user",
+        "result": user,
+        "input": event,
+    }
+
+    response = {"statusCode": 200, "body": json.dumps(body)}
+
+    return response
+
+@app.route('/user', methods=['GET'])
+def lambda_handler(event=None, context=None):
+    
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('Users')
+
+    queryStringParameters = event['queryStringParameters']
+
+    if queryStringParameters is not None:
+
+        email = event['queryStringParameters']['Email']
+
+        try: 
+            user = table.get_item(Key={'Email': email})['Item']
+
+        except:
+            user = None
+
+        body = {
+            "message": "Reading user",
+            "result": user,
+            "input": event,
+        }
+
+    else:
+
+        body = {
+            "message": "No Email, can't read user"
         }
 
     response = {"statusCode": 200, "body": json.dumps(body)}
