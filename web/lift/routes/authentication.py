@@ -17,7 +17,7 @@ def register_athlete():
 
         if form.validate_on_submit():
 
-            put_athlete(Athlete(form.email.data, form.name.data, form.age.data, form.weightclass.data, []))
+            put_athlete(Athlete(form.email.data, form.name.data, form.age.data, form.weightclass.data))
             put_user(User(form.email.data, form.email.data, form.password.data, False))
 
             return redirect(url_for('authentication.login'))
