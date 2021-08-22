@@ -1,9 +1,17 @@
 
+"""
+This is a copy paste of the lambda functions
+"""
+
+
 import json, boto3
 import re
 from flask import Flask, request
 app = Flask(__name__)
 
+"""
+Athlete resource
+"""
 @app.route('/', methods=['GET'])
 def index(event=None, context=None):
     body = {
@@ -19,15 +27,16 @@ def index(event=None, context=None):
 @app.route('/athlete', methods=['PUT'])
 def put_athlete(event=None, context=None):
     
-    details = request.json
-
+    details = json.loads(event['body'])
+    
     # Build athlete object
     athlete = {
-        "Email": details['Email'],
-        "Name": details['Name'],
-        "Age": details['Age'],
-        "WeightClass": details['WeightClass'],
-        "Sessions": []
+        "Email": details["Email"],
+        "Name": details["Name"],
+        "Age": details["Age"],
+        "Coach": details["Coach"],
+        "WeightClass": details["WeightClass"],
+        "Sessions": details["Sessions"]
     }
 
     dynamodb = boto3.resource('dynamodb')
@@ -38,7 +47,7 @@ def put_athlete(event=None, context=None):
     )
 
     body = {
-        "message": "Creating athlete",
+        "message": "Putting athlete",
         "result": athlete,
         "input": event,
     }
@@ -53,9 +62,13 @@ def get_athlete(event=None, context=None):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('Athletes')
 
-    if 'Email' in request.args:
+    queryStringParameters = event['queryStringParameters']
 
-        athlete = table.get_item(Key={'Email': request.args.get('Email')})
+    if queryStringParameters is not None:
+
+        email = event['queryStringParameters']['Email']
+
+        athlete = table.get_item(Key={'Email': email})
 
         body = {
             "message": "Reading athlete",
@@ -81,15 +94,15 @@ def get_athlete(event=None, context=None):
 @app.route('/athlete', methods=['PATCH'])
 def patch_athlete(event=None, context=None):
     
-    details = request.json
-
+    details = json.loads(event['body'])
+    
     # Build athlete object
     athlete = {
-        "Email": details['Email'],
-        "Name": details['Name'],
-        "Age": details['Age'],
-        "WeightClass": details['WeightClass'],
-        "Sessions": []
+        "Email": details["Email"],
+        "Name": details["Name"],
+        "Age": details["Age"],
+        "WeightClass": details["WeightClass"],
+        "Sessions": details["Sessions"]
     }
 
     dynamodb = boto3.resource('dynamodb')
@@ -115,9 +128,13 @@ def delete_athlete(event=None, context=None):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('Athletes')
 
-    if 'Email' in request.args:
+    queryStringParameters = event['queryStringParameters']
 
-        athlete = table.delete_item(Key={'Email': request.args.get('Email')})
+    if queryStringParameters is not None:
+
+        email = event['queryStringParameters']['Email']
+
+        athlete = table.delete_item(Key={'Email': email})
 
         body = {
             "message": "Deleting athlete",
@@ -127,12 +144,8 @@ def delete_athlete(event=None, context=None):
 
     else:
 
-        response = table.scan()
-        athletes = response['Items']
-
         body = {
-            "message": "No Email, cannot delete athlete",
-            "result": "",
+            "message": "No Email, cannot delete record",
             "input": event,
         }
 
