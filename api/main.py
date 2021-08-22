@@ -468,7 +468,7 @@ def lambda_handler(event=None, context=None):
     return response
 
 #
-# For local hosting
+# For local hosting and testing.
 #
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8181, debug=True)
