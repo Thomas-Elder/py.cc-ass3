@@ -25,7 +25,7 @@
             <div>
                 {% for session in coach_athlete.sessions %}
                     <div class="card">
-                        Date: {{ session.date }}
+                        <h5>Date: {{ session.date }}</h5>
                         {%for exercise in session.exercises %}
                             <div class="card">
                                 Name: {{ exercise['Name'] }} </br>
